@@ -25,7 +25,7 @@ io.github.bortexz/resocket {:mvn/version "0.0.1"}
 
 ## Usage
 
-See the docs for more detailed information about all the options available.
+See the [docs](https://cljdoc.org/d/io.github.bortexz/resocket) for more detailed information about all the options available.
 
 ### Quick introduction
 
