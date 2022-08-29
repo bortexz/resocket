@@ -199,7 +199,7 @@
    - `ping-interval` milliseconds interval to send ping frames to the server. Defaults 30000 (30 secs).
    - `ping-timeout` if ellapsed milliseconds without receiving a pong, aborts the connection. Defaults 10000 (10 secs).
    - `ping-payload` ping frame byte-array. Defaults to empty byte-array.
-   - `http-client` java.http.HttpClient instance to use, it will create a default one if not specified.
+   - `http-client` java.net.http.HttpClient instance to use, it will create a default one if not specified.
    - `connect-timeout` timeout in milliseconds to wait for establish a connection. Defaults to 30000 (30 secs)
    - `headers` map string->string with headers to use in http-client
    - `subprotocols` coll of string subprotocols to use
