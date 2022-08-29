@@ -212,7 +212,8 @@
    - `close-timeout` (optional) millisecond to wait before aborting the connection after closing the output. Defaults to
      10000 (10 secs).
    - `ex-handler` (optional) unary fn called with errors happening on internal calls to the jdk11 websocket. Defaults to
-     use uncaught exception handler."
+     use uncaught exception handler. Errors are wrapped in an ExceptionInfo that contains :val, :port and :error on its
+     data."
   ([url] (connection url {}))
   ([url {:keys [ping-interval
                 ping-timeout
