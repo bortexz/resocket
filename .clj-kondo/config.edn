@@ -1,0 +1,3 @@
+{:linters 
+ {:unresolved-symbol
+  {:exclude [(org.httpkit.server/with-channel [ch])]}}}
