@@ -267,6 +267,8 @@
      connection if there's one.
    
    Available opts:
+   - `get-url` called each time a new connection is attempted to get the url to be used on [[connection]].
+   - `get-opts` called each time a new connection is attempted to get the options to be used on [[connection]].
    - `retry-ms-fn` unary fn called with the current attempt at reconnecting, starting at 1. It must return a numer of 
      milliseconds to wait before retrying a new connection, or nil to close the reconnector. Defaults to 5000 (5 secs).
    - `on-error-retry-fn?` unary fn called with error when creating a new connection. Must return true to start a retry
