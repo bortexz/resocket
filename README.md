@@ -1,7 +1,7 @@
 # resocket
 [![Clojars Project](https://img.shields.io/clojars/v/io.github.bortexz/resocket.svg)](https://clojars.org/io.github.bortexz/resocket)[![Cljdoc](https://cljdoc.org/badge/io.github.bortexz/resocket)](https://cljdoc.org/d/io.github.bortexz/resocket)
 
-WebSocket client for Clojure wrapping the JDK11 WebSocket Client.
+JDK11 Clojure WebSocket client with core.async API
 
 ## Features
 
@@ -11,16 +11,17 @@ WebSocket client for Clojure wrapping the JDK11 WebSocket Client.
 - Specify `input` and `output` parsers to take/put your preferred data structure on the channels (maps, vecs, ...) and use the parser for json/edn parsing, etc.
 - Minimal dependencies, just `clojure` and `core.async`.
 - `reconnector` process to create new connections when the previous ones have been closed, returning a core.async `connections` channel to take new connections from.
+- Small codebase, around ~300 LOC docstrings included.
 
 ## Install
 ### **Leiningen/Boot**
 ```clojure
-[io.github.bortexz/resocket "0.0.1"]
+[io.github.bortexz/resocket "0.0.2"]
 ```
 
 ### **Clojure CLI/deps.edn**
 ```clojure
-io.github.bortexz/resocket {:mvn/version "0.0.1"}
+io.github.bortexz/resocket {:mvn/version "0.0.2"}
 ```
 
 ## Usage
