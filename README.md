@@ -16,12 +16,12 @@ JDK11 Clojure WebSocket client with core.async API
 ## Install
 ### **Leiningen/Boot**
 ```clojure
-[io.github.bortexz/resocket "0.0.2"]
+[io.github.bortexz/resocket "0.1.0"]
 ```
 
 ### **Clojure CLI/deps.edn**
 ```clojure
-io.github.bortexz/resocket {:mvn/version "0.0.2"}
+io.github.bortexz/resocket {:mvn/version "0.1.0"}
 ```
 
 ## Usage
@@ -32,6 +32,8 @@ See the [docs](https://cljdoc.org/d/io.github.bortexz/resocket) for more detaile
 
 Connection:
 ```Clojure
+(require '[bortexz.resocket :as resocket])
+
 (let [{:keys [input output closed error]} (a/<!! (resocket/connection "ws://<service>" {}))]
     (when-not error
       (a/<!! input) ;; Take new messages

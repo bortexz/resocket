@@ -272,13 +272,17 @@
    - `retry-ms-fn` unary fn called with the current attempt at reconnecting, starting at 1. It must return a numer of 
      milliseconds to wait before retrying a new connection, or nil to close the reconnector. Defaults to 5000 (5 secs).
    - `on-error-retry-fn?` unary fn called with error when creating a new connection. Must return true to start a retry
-     timeout to retry, otherwise the reconnector will be closed. Note: It is called with the original Exception unwrapped,
-     which will probably be an ExecutionException from the CompletableFuture returned by creating a new Websocket in JDK11.
-     You might want to get the wrapped exception for more details `(ex-cause <error>)`. Defaults to returning true 
-     when the wrapped exception is a java.net.ConnectException, false otherwise."
+     timeout to retry, otherwise the reconnector will be closed. 
+     Note: It is called with the original Exception unwrapped, which will be an ExecutionException from the 
+     CompletableFuture returned by creating a new Websocket in JDK11. You might want to get the wrapped exception for 
+     more details `(ex-cause <error>)`. Defaults to returning logical true when the wrapped exception is either a 
+     java.net.ConnectException or java.net.http.HttpTimeoutException, false otherwise."
   [{:keys [retry-ms-fn on-error-retry-fn? get-url get-opts]
     :or {retry-ms-fn (constantly 5000)
-         on-error-retry-fn? (fn [err] (instance? ConnectException (ex-cause err)))
+         on-error-retry-fn? (fn [err] 
+                              (let [ex (ex-cause err)]
+                                (or (instance? java.net.ConnectException ex)
+                                    (instance? java.net.http.HttpTimeoutException ex))))
          get-opts (constantly nil)}}]
   (let [connections (a/chan)
         close (a/promise-chan)]
