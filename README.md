@@ -45,7 +45,7 @@ Connection:
 
 Reconnector:
 ```Clojure
-(let [{:keys [connections close]} (resocket/reconnector {:get-url (constantly "ws://<service>")})]
+(let [{:keys [connections close closed?]} (resocket/reconnector {:get-url (constantly "ws://<service>")})]
     (a/go-loop []
       (when-let [conn (a/<! connections)] ;; get new connections until reconnector closed
         (loop []
@@ -55,6 +55,9 @@ Reconnector:
         (recur)))
     ;; Somewhere else, when tired of receiving new connections
     (a/close! close) ; Closes current connection (if any) and the reconnector
+
+    ;; Listen to closed? in a different place than the connections handler
+    (when (a/<! closed?) "Reconnector has been closed.")
   )
 ```
 

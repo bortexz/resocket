@@ -83,17 +83,18 @@
 (deftest reconnector
   (testing "base test"
     (with-ws-server {:on-receive #(http-kit/send! %1 %2)}
-      (let [{:keys [connections close]} (rs/reconnector {:get-url (constantly ws-url)})
+      (let [{:keys [connections close closed?]} (rs/reconnector {:get-url (constantly ws-url)})
             {:keys [input output]} (a/<!! connections)]
         (a/>!! output "Hello World")
         (is (= "Hello World" (a/<!! input)))
         (a/close! close)
         (is (nil? (a/<!! input)))
-        (is (nil? (a/<!! connections))))))
+        (is (nil? (a/<!! connections)))
+        (is (true? (a/<!! closed?))))))
   
   (testing "Creates new connections"
     (with-ws-server {:on-receive #(http-kit/send! %1 %2)}
-      (let [{:keys [connections close]} (rs/reconnector {:get-url (constantly ws-url)})
+      (let [{:keys [connections close closed?]} (rs/reconnector {:get-url (constantly ws-url)})
             {:keys [output]} (a/<!! connections)
             _ (is (some? output))
             _ (a/close! output)
@@ -105,7 +106,8 @@
             {:keys [closed]} (a/<!! connections)]
         (a/close! close)
         (a/<!! closed)
-        (is (nil? (a/<!! connections))))))
+        (is (nil? (a/<!! connections)))
+        (is (true? (a/<!! closed?))))))
   
   (testing "retries"
     (let [retries (atom 0)

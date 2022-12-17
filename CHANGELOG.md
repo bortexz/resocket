@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.0 - 2022-12-17
+### Added
+- `closed?` promise chan to reconnector, to listen to closed events outside the connections handler
+
 ## 0.1.0 - 2022-10-15
 ### Changed
 - default `on-error-retry-fn?` now also considers `java.net.http.HttpTimeoutException`

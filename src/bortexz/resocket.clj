@@ -265,6 +265,7 @@
    - `connections` unbuffered chan of new connections. Will be closed when the reconnector is closed.
    - `close` promise-chan that will close the reconnector when delivered or closed. It will close currently active 
      connection if there's one.
+   - `closed?` promise-chan that will be delivered with `true` when the reconnector is closed.
    
    Available opts:
    - `get-url` called each time a new connection is attempted to get the url to be used on [[connection]].
@@ -285,7 +286,9 @@
                                     (instance? java.net.http.HttpTimeoutException ex))))
          get-opts (constantly nil)}}]
   (let [connections (a/chan)
-        close (a/promise-chan)]
+        close (a/promise-chan)
+        closed? (a/promise-chan)
+        close! (fn [] (a/close! connections) (a/put! closed? true))]
     (a/go-loop [retry-att 0 
                 conn nil]
       (if (some? conn)
@@ -295,7 +298,7 @@
             conn-closed (recur 0 nil)
             close (do (a/close! conn-output)
                       (a/<! conn-closed)
-                      (a/close! connections))))
+                      (close!))))
         (let [retry-ms (if (pos? retry-att) (retry-ms-fn retry-att) 0)
               timer? (pos? retry-ms)
               retry? (or (and (not timer?) retry-ms (zero? retry-ms))
@@ -307,7 +310,8 @@
                     (recur 0 conn))
                 (if (on-error-retry-fn? error)
                   (recur (inc retry-att) nil)
-                  (a/close! connections))))
-            (a/close! connections)))))
+                  (close!))))
+            (close!)))))
     {:connections connections
-     :close close}))
+     :close close
+     :closed? closed?}))
